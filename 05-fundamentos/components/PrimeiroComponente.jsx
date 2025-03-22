@@ -3,7 +3,7 @@ import React from "react";
 import { Text, View } from 'react-native';
 
 //função do componente
-export default function PrimeiroComponente() {
+export default function primeiroComponente() {
 
     //retorno com JSX
     return (
