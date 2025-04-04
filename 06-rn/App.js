@@ -1,66 +1,119 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
-import { Button, Card, Divider, PaperProvider, Paragraph, Text, Title } from 'react-native-paper';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { Card, PaperProvider, Paragraph, Text, Title } from 'react-native-paper';
+import Estado from './components/Estado';
 
 export default function App() {
 
+  const listaEstadosMunicipios = [
+    {
+      nome: 'Rio de Janeiro',
+      sigla: 'RJ',
+      imagem: 'https://picsum.photos/700;',
+      descricao: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      municipios: [
+        {
+          nome: 'Rio de Janeiro',
+          imagem: 'https://picsum.photos/700;'
+        },
+        {
+          nome: 'Niterói',
+          imagem: 'https://picsum.photos/700;'
+        },
+        {
+          nome: 'Petrópolis',
+          imagem: 'https://picsum.photos/700;'
+        },
+        {
+          nome: 'Angra dos Reis',
+          imagem: 'https://picsum.photos/700;'
+        },
+        {
+          nome: 'Cabo Frio',
+          imagem: 'https://picsum.photos/700;'
+        }
+      ]
+    },
+    {
+      nome: 'São Paulo',
+      sigla: 'SP',
+      imagem: 'https://picsum.photos/700;',
+      descricao: 'São Paulo é o estado mais populoso do Brasil, com uma economia diversificada e forte.',
+      municipios: [
+        {
+          nome: 'São Paulo',
+          imagem: 'https://picsum.photos/700;'
+        },
+        {
+          nome: 'Campinas',
+          imagem: 'https://picsum.photos/700;'
+        },
+        {
+          nome: 'Santos',
+          imagem: 'https://picsum.photos/700;'
+        },
+        {
+          nome: 'Sorocaba',
+          imagem: 'https://picsum.photos/700;'
+        },
+        {
+          nome: 'Ribeirão Preto',
+          imagem: 'https://picsum.photos/700;'
+        }
+      ]
+    },
+    {
+      nome: 'Minas Gerais',
+      sigla: 'MG',
+      imagem: 'https://picsum.photos/700;',
+      descricao: 'Minas Gerais é conhecido por sua rica história, culinária e belas paisagens.',
+      municipios: [
+        {
+          nome: 'Belo Horizonte',
+          imagem: 'https://picsum.photos/700;'
+        },
+        {
+          nome: 'Ouro Preto',
+          imagem: 'https://picsum.photos/700;'
+        },
+        {
+          nome: 'Uberlândia',
+          imagem: 'https://picsum.photos/700;'
+        },
+        {
+          nome: 'Juiz de Fora',
+          imagem: 'https://picsum.photos/700;'
+        },
+        {
+          nome: 'Montes Claros',
+          imagem: 'https://picsum.photos/700;'
+        }
+      ]
+    }
+  ]
+
   return (
     <PaperProvider>
+      <View style={styles.container}>
+        <StatusBar style="auto" />
 
-      <ScrollView>
-        <View style={styles.container}>
-          <StatusBar style="auto" />
+        <Text variant='displaySmall'> Lista de Estados</Text>
 
-          <Button mode='contained' onPress={() => alert('Clicou')} >Clicar AQUI!</Button>
-          <Button mode='contained-tonal' >Clicar</Button>
-          <Button mode='elevated' >Clicar</Button>
-          <Button mode='outlined' >Clicar</Button>
-          <Button mode='text' >Clicar</Button>
+        <FlatList
+          data={listaEstadosMunicipios}
+          renderItem={({ item }) => (
+            <Estado
+              nome={item.nome}
+              sigla={item.sigla}
+              descricao={item.descricao}
+              imagem={item.imagem}
+              municipios={item.municipios}
+            />
+          )}
+        />
 
-          <Text variant='bodyLarge'>Um texto qualquer</Text>
-          <Divider style={{ width: '90%' }} />
-          <Text variant='displayLarge'>Um texto qualquer</Text>
-          <Divider style={{ width: '90%' }} />
-          <Text variant='headlineLarge'>Um texto qualquer</Text>
-          <Divider style={{ width: '90%' }} />
-          <Text variant='labelLarge'>Um texto qualquer</Text>
-          <Divider style={{ width: '90%' }} />
-          <Text variant='titleLarge'>Um texto qualquer</Text>
-          <Divider style={{ width: '90%' }} />
-          <Text>Um texto qualquer</Text>
-          <Divider style={{ width: '90%' }} />
-
-
-          <Card style={{ margin: 10 }}>
-            <Card.Title title="teste">
-              <Text>Teste</Text>
-            </Card.Title>
-            <Card.Content>
-              <Title>Um titulo qualquer</Title>
-              <Paragraph>lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum</Paragraph>
-            </Card.Content>
-            <Card.Actions>
-              <Text>teste</Text>
-            </Card.Actions>
-          </Card>
-
-
-          <Card style={{ margin: 10 }}>
-            <Card.Title title="teste">
-              <Text>Teste</Text>
-            </Card.Title>
-            <Card.Content>
-              <Title>Um titulo qualquer</Title>
-              <Paragraph>lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum</Paragraph>
-            </Card.Content>
-            <Card.Actions>
-              <Text>teste</Text>
-            </Card.Actions>
-          </Card>
-
-        </View>
-      </ScrollView>
+      </View>
     </PaperProvider>
   );
 }
@@ -70,6 +123,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
 });
