@@ -1,0 +1,170 @@
+Mobile 2
+
+-------------------------------------------------- COMANDOS --------------------------------------------------
+
+npx create-expo-app@latest nome-projeto --template blank
+
+npm install react-native-paper
+
+npm install react-native-safe-area-context
+
+npm install @react-navigation/native
+
+npx expo install react-native-screens react-native-safe-area-contexto
+
+npm install @react-navigation/bottom-tabs
+
+
+
+--------------------------------------------------------------------------------------------------------------
+
+- para estilizar sua página, tem que usar stylesheet (exemplo no projeto), tem que  criar um container e aí sim, pode colocar propriedades css.
+
+- pode estilizar direto na tag, usar propriedade adequada.
+
+- no style, diretamente dentro da tag, usar duas chaves "{{}}".
+
+- quando o conteúdo passar, temos que usar uma scrollview, ela vai envolver TODO o conteúdo
+
+- quando criar um novo projeto, colocar o "<PaperProvider></ PaperProvider>" fora da view principal
+
+- 
+
+
+
+
+**color hunt**
+**rnfs -- é um snippet de componente**
+
+-------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+
+npm i npm -g
+npx create-expo-app conceitos(nome do projeto) : cria um projeto usando a ferramenta expo 
+npx expo start 
+
+
+a
+npx expo install react-dom@18.2.0
+npx expo install react-dom@18.2.0
+
+# app.json
+"expo": {
+ "web" : {
+	"bundler": "metro"
+	}
+}
+
+
+#Configurando o git
+1-git config --global user.name "Estevao Costa"
+2-git config --global user.email "tevito220303@gmail.com"
+
+#React Native Paper
+npm install react-native-paper
+npm install react-native-safe-area-context
+
+
+#Navigation
+npm install @react-navigation/native @react-navigation/native-stack
+npx expo install react-native-screens react-native-safe-area-context
+
+
+npm i axios
+
+https://image.tmdb.org/t/p/
+
+http://api.themoviedb.org/3/movie/popular?api_key=0566c1b9bea6d9301505f225de38dc86
+https://api.themoviedb.org/3/movie/popular?language=pt-BR&api_key=0566c1b9bea6d9301505f225de38dc86
+https://image.tmdb.org/t/p/w500/
+
+
+const Stack = createNativeStackNavigator();
+
+  <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="filmes" component={FilmesPopulares} options={{ title: "Filmes Populares" }} />
+        </Stack.Navigator>
+      </NavigationContainer>
+
+
+# Mudar array
+  const [filmes, setFilmes] = useState(['Pálio', 'Fiat', 'Gol'])
+
+  function alterar() {
+    setFilmes(['Pálio', 'Fiat', 'gol', 'Virtus', 'Uno', 'Celta'])
+  }
+  return (
+    <>
+      {filmes.map(item => (
+        <Text>Nome</Text>
+      ))}
+    </>
+  )
+}
+
+// useState e useEffect
+
+ const [filmes, setFilmes] = useState([])
+
+  useEffect(() => {
+    apiFilmes.get('/movie/popular?language=pt-BR').then(resultado => {
+      setFilmes(resultado.data.results)
+      
+    })
+  }, [])
+
+// Navegar entre as páginas
+1- Colocar o {navigation}
+const FilmesPopular = ({navigation}) => {
+
+// Chamar o navigation.push
+2- onPress={ ()=>navigation.push('filmes-detalhes', {id: item.id}) }
+
+
+
+
+
+const Stack = createNativeStackNavigator();
+
+export default function App() {
+  return (
+    <>
+      <PaperProvider>
+          <NavigationContainer>
+            <Stack.Navigator>
+              <Stack.Screen name="filmes-populares" component={FilmesPopulares} options={{ title: 'Filmes Populares' }} />
+              <Stack.Screen name="filmes-detalhes" component={FilmesDetalhes} options={{ title: 'Detalhes' }} />
+              <Stack.Screen name="atores-detalhes" component={AtoresDeta} options={{ title: 'Detalhes' }} />
+            </Stack.Navigator>
+          </NavigationContainer>
+      </PaperProvider>
+    </>
+  );
+}
+
+npm i formik 
+npm i remask
+npm i yup
+npm install @react-native-picker/picker --save
+
+import * as Yup from 'yup';
+
+
+
+
+
+
+
+
+
+
+
+
+GIT BASH
+
+ls - lista as pastas
+pwd - mostra a pasta que está
+cd - entra em uma pasta
+cd .. - volta uma pasta
