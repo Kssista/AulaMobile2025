@@ -6,7 +6,7 @@ import TabRoutes from './TabRoutes';
 // Tela simples de configurações
 // Ícones para o menu
 import { Ionicons } from '@expo/vector-icons';
-import HomeScreen from '../screens/HomeScreen';
+import PartidasScreen from '../screens/PartidasScreen';
 import SorteioScreen from '../screens/SorteioScreen';
 
 const Drawer = createDrawerNavigator();
@@ -22,6 +22,22 @@ export default function DrawerRoutes() {
                 options={{
                     title: 'Pelada FC',
                     drawerIcon: ({ color, size }) => <Ionicons name="football-outline" size={size} color={color} />
+                }}
+            />
+            <Drawer.Screen
+                name="PartidasScreen"
+                component={PartidasScreen}
+                options={{
+                    title: 'Partidas',
+                    drawerIcon: ({ color, size }) => <Ionicons name="calendar-outline" size={size} color={color} />
+                }}
+            />
+            <Drawer.Screen
+                name="SorteioScreen"
+                component={SorteioScreen}
+                options={{
+                    title: 'Sorteio',
+                    drawerIcon: ({ color, size }) => <Ionicons name="dice-outline" size={size} color={color} />
                 }}
             />
 

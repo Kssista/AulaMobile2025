@@ -16,28 +16,20 @@ export default function TabRoutes() {
     return (
         <Tab.Navigator>
             <Tab.Screen
-                name='HomeScreen'
+                name="Home"
                 component={HomeScreen}
                 options={{
-                    title: 'Tela de Início',
-                    headerTitleAlign: 'center',
-                    headerTintColor: 'white',
-                    headerStyle: {
-                        backgroundColor: 'tomato'
-                    },
-                    tabBarIcon: ({ color, size }) => <Ionicons name='home' color={color} size={size} />
+                    headerShown: false,
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="home" color={color} size={size} />
+                    ),
                 }}
             />
             <Tab.Screen
                 name="Partidas"
                 component={PartidasScreen}
                 options={{
-                    title: 'Partidas',
-                    headerTitleAlign: 'center',
-                    headerTintColor: 'white',
-                    headerStyle: {
-                        backgroundColor: 'tomato'
-                    },
+                    headerShown: false,
                     tabBarIcon: ({ color, size }) => <Ionicons name='calendar-outline' color={color} size={size} />
                 }}
             />
@@ -45,12 +37,7 @@ export default function TabRoutes() {
                 name="Sorteios"
                 component={SorteioScreen}
                 options={{
-                    title: 'Sorteios',
-                    headerTitleAlign: 'center',
-                    headerTintColor: 'white',
-                    headerStyle: {
-                        backgroundColor: 'tomato'
-                    },
+                    headerShown: false,
                     tabBarIcon: ({ color, size }) => <Ionicons name='dice-outline' color={color} size={size} />
                 }}
             />
