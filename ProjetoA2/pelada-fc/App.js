@@ -1,18 +1,14 @@
-// App.js
+import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-// Telas principais
-import DrawerRoutes from './src/routes/DrawerRoutes';
-
-const Tab = createBottomTabNavigator();
+import { Provider as PaperProvider } from 'react-native-paper';
+import DrawerRoutes from './src/routes/DrawerRoutes'; 
 
 export default function App() {
   return (
-    <NavigationContainer>
-
-      <DrawerRoutes />
-
-    </NavigationContainer>
+    <PaperProvider> 
+      <NavigationContainer>
+        <DrawerRoutes /> 
+      </NavigationContainer>
+    </PaperProvider>
   );
 }

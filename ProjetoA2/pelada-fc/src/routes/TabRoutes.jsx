@@ -1,14 +1,10 @@
 import React from 'react';
-// Importa o Bottom Tabs para navegação na parte inferior
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-// Importa as telas que ficarão nas abas
-import PartidasScreen from '../screens/PartidasScreen';
 import HomeScreen from '../screens/HomeScreen';
-
-// Ícones para as abas
 import { Ionicons } from '@expo/vector-icons';
-import SorteioScreen from '../screens/SorteioScreen';
+import SorteioScreen from '../screens/home/sorteio/SorteioScreen';
+import PartidasStack from '../screens/home/partidas/PartidasStack';
+import JogadoresStack from '../screens/home/jogadores/JogadoresStack'; 
 
 const Tab = createBottomTabNavigator();
 
@@ -26,11 +22,19 @@ export default function TabRoutes() {
                 }}
             />
             <Tab.Screen
-                name="Partidas"
-                component={PartidasScreen}
+                name="PartidasStack"
+                component={PartidasStack}
                 options={{
                     headerShown: false,
                     tabBarIcon: ({ color, size }) => <Ionicons name='calendar-outline' color={color} size={size} />
+                }}
+            />
+            <Tab.Screen
+                name="JogadoresStack" 
+                component={JogadoresStack} 
+                options={{
+                    headerShown: false,
+                    tabBarIcon: ({ color, size }) => <Ionicons name='people-outline' color={color} size={size} />
                 }}
             />
             <Tab.Screen
@@ -41,7 +45,6 @@ export default function TabRoutes() {
                     tabBarIcon: ({ color, size }) => <Ionicons name='dice-outline' color={color} size={size} />
                 }}
             />
-
         </Tab.Navigator>
     );
 }

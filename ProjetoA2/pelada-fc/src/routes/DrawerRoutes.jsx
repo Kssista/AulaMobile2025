@@ -1,21 +1,17 @@
 import React from 'react';
-// Importa o drawer navigator para menu lateral
 import { createDrawerNavigator } from '@react-navigation/drawer';
-// Importa as abas que ficarão na parte inferior da tela
 import TabRoutes from './TabRoutes';
-// Tela simples de configurações
-// Ícones para o menu
 import { Ionicons } from '@expo/vector-icons';
-import PartidasScreen from '../screens/PartidasScreen';
-import SorteioScreen from '../screens/SorteioScreen';
+import SorteioScreen from '../screens/home/sorteio/SorteioScreen';
+import PartidasStack from '../screens/home/partidas/PartidasStack';
+import JogadoresStack from '../screens/home/jogadores/JogadoresStack'; 
+
 
 const Drawer = createDrawerNavigator();
 
-// Componente das rotas do Drawer
 export default function DrawerRoutes() {
     return (
         <Drawer.Navigator>
-            {/* Tela principal que abre as abas inferiores */}
             <Drawer.Screen
                 name="HomeScreen"
                 component={TabRoutes}
@@ -25,11 +21,19 @@ export default function DrawerRoutes() {
                 }}
             />
             <Drawer.Screen
-                name="PartidasScreen"
-                component={PartidasScreen}
+                name="PartidasScreen" 
+                component={PartidasStack}
                 options={{
                     title: 'Partidas',
                     drawerIcon: ({ color, size }) => <Ionicons name="calendar-outline" size={size} color={color} />
+                }}
+            />
+            <Drawer.Screen
+                name="JogadoresScreen" 
+                component={JogadoresStack} 
+                options={{
+                    title: 'Jogadores',
+                    drawerIcon: ({ color, size }) => <Ionicons name="people-outline" size={size} color={color} />
                 }}
             />
             <Drawer.Screen
@@ -40,25 +44,6 @@ export default function DrawerRoutes() {
                     drawerIcon: ({ color, size }) => <Ionicons name="dice-outline" size={size} color={color} />
                 }}
             />
-
-            {/* <Drawer.Screen
-                name='SorteioScreen'
-                component={SorteioScreen}
-                options={{
-                    title: "Sorteios",
-                    drawerIcon: ({ color, size }) => <Ionicons name='home' color={color} size={size} />
-                }}
-            /> */}
-
-            {/* Tela de configurações */}
-            {/* <Drawer.Screen 
-        name="Configuracoes" 
-        component={Configuracoes} 
-        options={{
-          title: 'Configurações',
-          drawerIcon: ({ color, size }) => <Ionicons name="settings-outline" size={size} color={color} />
-        }}
-      /> */}
         </Drawer.Navigator>
     );
 }
