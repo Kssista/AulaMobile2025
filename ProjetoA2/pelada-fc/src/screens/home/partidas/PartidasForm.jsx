@@ -17,8 +17,18 @@ export default function PartidasForm({ navigation, route }) {
   const [obs, setObs] = useState(partidaAntigo.obs || '');
   const [tipo, setTipo] = useState(partidaAntigo.tipo || '');
 
+  // Estados para os nomes dos times, que podem ser personalizados ou padronizados após o sorteio
+  const [nomeTimeCasa, setNomeTimeCasa] = useState(partidaAntigo.nomeTimeCasa || 'Time da Casa');
+  const [nomeTimeFora, setNomeTimeFora] = useState(partidaAntigo.nomeTimeFora || 'Time de Fora');
+
+  // Estados para os jogadores que participarão da partida (selecionados no dropdown)
   const [jogadoresDisponiveis, setJogadoresDisponiveis] = useState([]);
   const [jogadoresSelecionados, setJogadoresSelecionados] = useState(partidaAntigo.jogadoresParticipantes || []);
+
+  // Novos estados para os jogadores de cada time após o sorteio
+  const [timeCasaJogadores, setTimeCasaJogadores] = useState(partidaAntigo.timeCasaJogadores || []);
+  const [timeForaJogadores, setTimeForaJogadores] = useState(partidaAntigo.timeForaJogadores || []);
+
 
   const [dialogVisible, setDialogVisible] = useState(false);
 
@@ -37,6 +47,11 @@ export default function PartidasForm({ navigation, route }) {
     } else {
       setJogadoresSelecionados(prev => [...prev, jogador]);
     }
+    // Ao mudar a seleção de jogadores, limpa os times sorteados para forçar um novo sorteio
+    setTimeCasaJogadores([]);
+    setTimeForaJogadores([]);
+    setNomeTimeCasa('Time da Casa'); // Reseta nomes padrão
+    setNomeTimeFora('Time de Fora'); // Reseta nomes padrão
   }
 
   const showDialog = () => setDialogVisible(true);
@@ -52,22 +67,78 @@ export default function PartidasForm({ navigation, route }) {
     return `${jogadoresSelecionados.length} jogadores selecionados`;
   };
 
+  const sortearTimes = () => {
+    if (jogadoresSelecionados.length < 2) {
+      Alert.alert("Erro", "Selecione pelo menos 2 jogadores para sortear os times.");
+      return;
+    }
+
+    // Cria uma cópia dos jogadores selecionados e embaralha aleatoriamente
+    const shuffledPlayers = [...jogadoresSelecionados].sort(() => Math.random() - 0.5);
+
+    // Divide os jogadores em dois times
+    const meio = Math.ceil(shuffledPlayers.length / 2); // Garante que o time da casa pode ter 1 a mais se for ímpar
+    const casa = shuffledPlayers.slice(0, meio);
+    const fora = shuffledPlayers.slice(meio);
+
+    setTimeCasaJogadores(casa);
+    setTimeForaJogadores(fora);
+
+    // Define nomes padrão para os times se ainda estiverem com os nomes genéricos
+    if (nomeTimeCasa === 'Time da Casa' || nomeTimeCasa === '') setNomeTimeCasa('Time A');
+    if (nomeTimeFora === 'Time de Fora' || nomeTimeFora === '') setNomeTimeFora('Time B');
+
+    Alert.alert("Sucesso", `Times sorteados com ${casa.length} e ${fora.length} jogadores!`);
+  };
+
   async function salvar() {
     const partida = {
       nome,
       hora,
       local,
       data,
-      jogadores: jogadoresSelecionados.length,
+      jogadores: jogadoresSelecionados.length, // A quantidade total de jogadores
       obs,
       tipo,
-      jogadoresParticipantes: jogadoresSelecionados,
+      jogadoresParticipantes: jogadoresSelecionados, // A lista de jogadores selecionados para a partida
+      
+      // Novos campos para os times sorteados
+      nomeTimeCasa,
+      nomeTimeFora,
+      timeCasaJogadores,
+      timeForaJogadores,
     };
 
     if (!partida.nome || !partida.hora || !partida.local || !partida.data || partida.jogadores === 0) {
       Alert.alert('Erro', 'Por favor, preencha todos os campos obrigatórios e selecione pelo menos um jogador!');
       return;
     }
+
+    // Se houver jogadores selecionados, mas os times não foram sorteados, avisa.
+    // Opcional: Você pode tornar o sorteio obrigatório se quiser.
+    if (partida.jogadores > 0 && (timeCasaJogadores.length === 0 || timeForaJogadores.length === 0)) {
+       Alert.alert('Atenção', 'Você selecionou jogadores, mas os times ainda não foram sorteados. Deseja continuar sem sortear os times?', [
+           { text: 'Não', style: 'cancel' },
+           { text: 'Sim', onPress: async () => { /* Repete a lógica de salvamento aqui */
+                try {
+                    if (partidaAntigo.id) {
+                        partida.id = partidaAntigo.id;
+                        await PartidasService.atualizar(partida);
+                        Alert.alert('Sucesso!', 'Partida atualizada com sucesso!');
+                    } else {
+                        await PartidasService.salvar(partida);
+                        Alert.alert('Sucesso!', 'Partida cadastrada com sucesso!');
+                    }
+                    navigation.goBack();
+                } catch (error) {
+                    console.error("Erro ao salvar partida:", error);
+                    Alert.alert("Erro", "Erro ao salvar partida. Tente novamente.");
+                }
+           }}
+       ]);
+       return; // Retorna para evitar o salvamento duplo
+    }
+
 
     try {
       if (partidaAntigo.id) {
@@ -146,6 +217,25 @@ export default function PartidasForm({ navigation, route }) {
           )}
         />
 
+        {/* Campo para nome do Time da Casa - EDITÁVEL */}
+        <TextInput
+          label='Nome do Time da Casa (Ex: Time A)'
+          style={styles.input}
+          mode='outlined'
+          value={nomeTimeCasa}
+          onChangeText={setNomeTimeCasa}
+        />
+
+        {/* Campo para nome do Time de Fora - EDITÁVEL */}
+        <TextInput
+          label='Nome do Time de Fora (Ex: Time B)'
+          style={styles.input}
+          mode='outlined'
+          value={nomeTimeFora}
+          onChangeText={setNomeTimeFora}
+        />
+
+        {/* Seção de seleção de jogadores com o dropdown */}
         <Text style={styles.sectionTitle}>Jogadores da Partida ({jogadoresSelecionados.length} selecionados):</Text>
         <Button
           mode="outlined"
@@ -156,6 +246,33 @@ export default function PartidasForm({ navigation, route }) {
         >
           <Text>{getSelectedPlayersText()}</Text>
         </Button>
+
+        {/* Botão de Sortear Times */}
+        <Button
+          mode="contained"
+          onPress={sortearTimes}
+          style={styles.sortearButton}
+          disabled={jogadoresSelecionados.length < 2} // Desabilita se não houver jogadores suficientes
+        >
+          Sortear Times
+        </Button>
+
+        {/* Exibição dos Times Sorteados (se houver) */}
+        {timeCasaJogadores.length > 0 && timeForaJogadores.length > 0 && (
+          <View style={styles.sortedTeamsContainer}>
+            <Text style={styles.teamHeader}>{nomeTimeCasa} ({timeCasaJogadores.length} jogadores):</Text>
+            {timeCasaJogadores.map(jogador => (
+              <Text key={jogador.id} style={styles.teamPlayer}>- {jogador.nome}</Text>
+            ))}
+
+            <View style={styles.separator}></View>
+
+            <Text style={styles.teamHeader}>{nomeTimeFora} ({timeForaJogadores.length} jogadores):</Text>
+            {timeForaJogadores.map(jogador => (
+              <Text key={jogador.id} style={styles.teamPlayer}>- {jogador.nome}</Text>
+            ))}
+          </View>
+        )}
 
         <TextInput
           label='Observações'
@@ -271,6 +388,38 @@ const styles = StyleSheet.create({
     color: '#333',
     textAlign: 'left',
     paddingLeft: 0,
+  },
+  sortearButton: {
+    marginBottom: 20,
+    paddingVertical: 10,
+    backgroundColor: '#FF9800', // Cor laranja para o botão Sortear
+  },
+  sortedTeamsContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 20,
+    elevation: 2,
+    borderLeftWidth: 5,
+    borderLeftColor: '#4CAF50',
+  },
+  teamHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    marginTop: 10,
+    color: '#333',
+  },
+  teamPlayer: {
+    fontSize: 16,
+    marginLeft: 10,
+    marginBottom: 3,
+    color: '#555',
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#eee',
+    marginVertical: 10,
   },
   noPlayersText: {
     fontStyle: 'italic',
