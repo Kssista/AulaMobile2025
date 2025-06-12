@@ -89,22 +89,6 @@ export default function HomeScreen() {
 
             <Card style={styles.card}>
                 <Card.Content>
-                    <Text variant="titleLarge" style={styles.sectionTitle}>Últimas Notícias</Text>
-                    <Text style={styles.cardText}>
-                        Fique por dentro das novidades do mundo do futebol e das próximas partidas!
-                    </Text>
-                    <Button
-                        mode="text"
-                        onPress={() => console.log('Ver Notícias')}
-                        style={styles.cardButton}
-                    >
-                        Ver Notícias
-                    </Button>
-                </Card.Content>
-            </Card>
-
-            <Card style={styles.card}>
-                <Card.Content>
                     <Text variant="titleLarge" style={styles.sectionTitle}>Gerenciar Partidas</Text>
                     <Text style={styles.cardText}>
                         Crie, edite e acompanhe todas as suas partidas agendadas.

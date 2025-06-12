@@ -1,139 +1,145 @@
+// src/screens/home/partidas/PartidasLista.jsx
 import { useEffect, useState } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
-import { Button, Card, Text, IconButton, Dialog, Portal } from 'react-native-paper'
-import PartidasService from './PartidasService'
-import JogadoresService from '../jogadores/JogadoresService';
-import { useIsFocused } from '@react-navigation/native'
+import { Button, Card, Text, IconButton } from 'react-native-paper'
+import PartidasService from './PartidasService';
 
 export default function PartidasLista({ navigation, route }) {
+
   const [partidas, setPartidas] = useState([])
-  const [showDialog, setShowDialog] = useState(false);
-  const [partidaToDelete, setPartidaToDelete] = useState(null);
-  const isFocused = useIsFocused();
+
+  // Recarregar a lista quando a tela focar (útil após salvar ou excluir)
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      buscarPartidas();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   useEffect(() => {
-    if (isFocused) {
-      buscarPartidas();
-    }
-  }, [isFocused]);
+    buscarPartidas()
+  }, [])
 
   async function buscarPartidas() {
-    const listaPartidas = await PartidasService.listar();
-    const jogadoresGlobais = await JogadoresService.listar();
-
-    const partidasComNomesJogadores = listaPartidas.map(partida => {
-      const nomesJogadores = partida.jogadoresAssociados
-        ? partida.jogadoresAssociados.map(jogadorId => {
-            const jogador = jogadoresGlobais.find(j => j.id === jogadorId);
-            return jogador ? jogador.apelido || jogador.nome : 'Jogador Desconhecido';
-          }).join(', ')
-        : 'Nenhum jogador associado';
-      return { ...partida, nomesJogadores };
-    });
-
-    setPartidas(partidasComNomesJogadores);
+    const listaPartidas = await PartidasService.listar()
+    setPartidas(listaPartidas)
   }
 
-  function handleExcluirPartida(id) {
-    setPartidaToDelete(id);
-    setShowDialog(true);
-  }
-
-  async function confirmarExclusao() {
-    await PartidasService.remover(partidaToDelete);
-    buscarPartidas();
-    alert('Partida excluída com sucesso!');
-    setShowDialog(false);
-    setPartidaToDelete(null);
-  }
-
-  function cancelarExclusao() {
-    setShowDialog(false);
-    setPartidaToDelete(null);
+  async function excluirPartida(id) {
+    await PartidasService.remover(id)
+    buscarPartidas()
+    alert('Partida excluída com sucesso!') // Corrigido erro de digitação
   }
 
   return (
     <View style={styles.container}>
-      <Button
-        style={styles.addButton}
-        mode='contained'
-        icon='plus'
-        onPress={() => navigation.navigate('PartidasForm')}
-      >
-        Cadastrar Partida
-      </Button>
+      <View style={styles.buttonsContainer}>
+        <Button
+          style={styles.button}
+          mode='contained'
+          icon='plus'
+          onPress={() => navigation.navigate('PartidasForm')}
+        >
+          Cadastrar Nova Partida
+        </Button>
+        <Button
+          style={styles.button}
+          mode='outlined' // Usando outlined para diferenciar
+          icon='trophy'
+          onPress={() => navigation.navigate('ResultadosScreen')}
+        >
+          Ver Resultados
+        </Button>
+      </View>
+
 
       <FlatList
         data={partidas}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id.toString()} // Adiciona keyExtractor
         renderItem={({ item }) => (
           <Card style={styles.card}>
             <Card.Content>
-              <Text>ID: {item.id}</Text>
-              <Text>Nome: {item.nome}</Text>
+              <Text style={styles.cardTitle}>{item.nome}</Text>
               <Text>Hora: {item.hora}</Text>
-              <Text>Qtd de Jogadores por Time: {item.jogadoresPorTime}</Text>
+              <Text>Qtd de Jogadores: {item.jogadores}</Text>
               <Text>Local: {item.local}</Text>
               <Text>Data: {item.data}</Text>
               <Text>Observações: {item.obs}</Text>
               <Text>Tipo de Jogo: {item.tipo}</Text>
-              <Text>Jogadores Associados: {item.nomesJogadores}</Text>
+              {item.placar && item.placar.partidaFinalizada && (
+                <View style={styles.finalizedPlacar}>
+                  <Text style={styles.finalizedPlacarText}>Placar Final: {item.placar.timeCasaGols} X {item.placar.timeForaGols}</Text>
+                  <Text style={styles.finalizedPlacarSubtext}>Salvo em: {new Date(item.placar.dataSalvamento).toLocaleDateString()}</Text>
+                </View>
+              )}
             </Card.Content>
-            <Card.Actions>
+            <Card.Actions style={styles.cardActions}>
               <IconButton
-                icon='pencil'
+                icon="pencil"
+                color="blue"
                 onPress={() => navigation.navigate('PartidasForm', item)}
               />
               <IconButton
-                icon='trash-can'
-                onPress={() => handleExcluirPartida(item.id)}
+                icon="scoreboard"
+                color="green"
+                onPress={() => navigation.navigate('PlacarScreen', { partidaId: item.id })} // Navega para a tela de placar
               />
-              <Button
-                mode="outlined"
-                icon="dice-multiple"
-                onPress={() => navigation.navigate('SorteioScreen', { partida: item })}
-                style={styles.sortButton}
-                disabled={!item.jogadoresAssociados || item.jogadoresAssociados.length < 2}
-              >
-                Sortear
-              </Button>
+              <IconButton
+                icon="delete"
+                color="red"
+                onPress={() => excluirPartida(item.id)}
+              />
             </Card.Actions>
           </Card>
         )}
       />
-
-      <Portal>
-        <Dialog visible={showDialog} onDismiss={cancelarExclusao}>
-          <Dialog.Title>Confirmar Exclusão</Dialog.Title>
-          <Dialog.Content>
-            <Text>Tem certeza que deseja excluir esta partida?</Text>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={cancelarExclusao}>Cancelar</Button>
-            <Button onPress={confirmarExclusao}>Excluir</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f0f0f0',
   },
-  addButton: {
-    margin: 10,
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  button: {
+    flex: 1,
+    marginHorizontal: 5,
+    paddingVertical: 8,
   },
   card: {
-    marginVertical: 5,
-    marginHorizontal: 10,
-    elevation: 2,
+    marginVertical: 8,
+    borderRadius: 8,
+    elevation: 3,
   },
-  sortButton: {
-    marginLeft: 'auto',
-    marginRight: 8,
-  }
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  cardActions: {
+    justifyContent: 'flex-end',
+  },
+  finalizedPlacar: {
+    marginTop: 10,
+    padding: 5,
+    backgroundColor: '#e0ffe0',
+    borderRadius: 5,
+  },
+  finalizedPlacarText: {
+    fontWeight: 'bold',
+    color: '#2e7d32',
+    fontSize: 16,
+  },
+  finalizedPlacarSubtext: {
+    fontSize: 12,
+    color: '#555',
+    fontStyle: 'italic',
+  },
 });

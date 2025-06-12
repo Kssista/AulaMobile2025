@@ -1,17 +1,24 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const STORAGE_KEY = '@partidas'; 
-
 async function listar() {
-  const jsonValue = await AsyncStorage.getItem(STORAGE_KEY);
+  const jsonValue = await AsyncStorage.getItem('@partidas');
   return jsonValue != null ? JSON.parse(jsonValue) : [];
 }
 
 async function salvar(partida) {
   partida.id = new Date().getTime();
+  // Adiciona campos para os nomes dos times no objeto partida, se não existirem
+  // Isso é importante para que o placar e resultados possam usar esses nomes
+  if (!partida.nomeTimeCasa) {
+    partida.nomeTimeCasa = 'Time A'; // Valor padrão
+  }
+  if (!partida.nomeTimeFora) {
+    partida.nomeTimeFora = 'Time B'; // Valor padrão
+  }
+  
   const partidas = await listar();
   partidas.push(partida);
-  await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(partidas));
+  await AsyncStorage.setItem('@partidas', JSON.stringify(partidas));
 }
 
 async function buscar(id) {
@@ -22,13 +29,13 @@ async function buscar(id) {
 async function remover(id) {
   const partidas = await listar();
   const novaLista = partidas.filter(partida => partida.id !== id);
-  await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(novaLista));
+  await AsyncStorage.setItem('@partidas', JSON.stringify(novaLista));
 }
 
-async function atualizar(novaPartida) { 
+async function atualizar(novopartida) {
   const partidas = await listar();
-  const novaLista = partidas.map(partida => partida.id === novaPartida.id ? novaPartida : partida);
-  await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(novaLista));
+  const novaLista = partidas.map(partida => partida.id === novopartida.id ? novopartida : partida);
+  await AsyncStorage.setItem('@partidas', JSON.stringify(novaLista));
 }
 
 export default {
@@ -37,4 +44,4 @@ export default {
   buscar,
   atualizar,
   remover
-};
+}

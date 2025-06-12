@@ -28,7 +28,9 @@
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.11.1",
     "react-native-vector-icons": "^10.2.0",
-    "@react-native-masked-view/masked-view": "0.3.2"
+    "@react-native-masked-view/masked-view": "0.3.2",
+    "expo-notifications": "~0.31.3",
+    "@react-native-picker/picker": "2.11.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
