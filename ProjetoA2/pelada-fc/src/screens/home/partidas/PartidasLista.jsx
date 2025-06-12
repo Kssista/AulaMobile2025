@@ -1,4 +1,3 @@
-// src/screens/home/partidas/PartidasLista.jsx
 import { useEffect, useState } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
 import { Button, Card, Text, IconButton } from 'react-native-paper'
@@ -8,7 +7,6 @@ export default function PartidasLista({ navigation, route }) {
 
   const [partidas, setPartidas] = useState([])
 
-  // Recarregar a lista quando a tela focar (útil após salvar ou excluir)
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       buscarPartidas();
@@ -28,7 +26,7 @@ export default function PartidasLista({ navigation, route }) {
   async function excluirPartida(id) {
     await PartidasService.remover(id)
     buscarPartidas()
-    alert('Partida excluída com sucesso!') // Corrigido erro de digitação
+    alert('Partida excluída com sucesso!') 
   }
 
   return (
@@ -44,7 +42,7 @@ export default function PartidasLista({ navigation, route }) {
         </Button>
         <Button
           style={styles.button}
-          mode='outlined' // Usando outlined para diferenciar
+          mode='outlined' 
           icon='trophy'
           onPress={() => navigation.navigate('ResultadosScreen')}
         >
@@ -55,7 +53,7 @@ export default function PartidasLista({ navigation, route }) {
 
       <FlatList
         data={partidas}
-        keyExtractor={(item) => item.id.toString()} // Adiciona keyExtractor
+        keyExtractor={(item) => item.id.toString()} 
         renderItem={({ item }) => (
           <Card style={styles.card}>
             <Card.Content>
@@ -82,7 +80,7 @@ export default function PartidasLista({ navigation, route }) {
               <IconButton
                 icon="scoreboard"
                 color="green"
-                onPress={() => navigation.navigate('PlacarScreen', { partidaId: item.id })} // Navega para a tela de placar
+                onPress={() => navigation.navigate('PlacarScreen', { partidaId: item.id })}
               />
               <IconButton
                 icon="delete"

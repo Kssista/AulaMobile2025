@@ -7,13 +7,11 @@ async function listar() {
 
 async function salvar(partida) {
   partida.id = new Date().getTime();
-  // Adiciona campos para os nomes dos times no objeto partida, se não existirem
-  // Isso é importante para que o placar e resultados possam usar esses nomes
   if (!partida.nomeTimeCasa) {
-    partida.nomeTimeCasa = 'Time A'; // Valor padrão
+    partida.nomeTimeCasa = 'Time A'; 
   }
   if (!partida.nomeTimeFora) {
-    partida.nomeTimeFora = 'Time B'; // Valor padrão
+    partida.nomeTimeFora = 'Time B'; 
   }
   
   const partidas = await listar();

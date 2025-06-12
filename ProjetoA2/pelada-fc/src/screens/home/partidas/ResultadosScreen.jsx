@@ -1,4 +1,3 @@
-// src/screens/home/partidas/ResultadosScreen.jsx
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import { Text, Card, Title, Paragraph, Button } from 'react-native-paper';
@@ -7,7 +6,7 @@ import PartidasService from './PartidasService';
 
 export default function ResultadosScreen({ navigation }) {
   const [partidasFinalizadas, setPartidasFinalizadas] = useState([]);
-  const isFocused = useIsFocused(); // Hook para saber se a tela está focada
+  const isFocused = useIsFocused(); 
 
   useEffect(() => {
     if (isFocused) {

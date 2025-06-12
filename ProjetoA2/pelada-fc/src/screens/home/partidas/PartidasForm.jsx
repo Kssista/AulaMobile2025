@@ -154,7 +154,6 @@ export default function PartidasForm({ navigation, route }) {
           labelStyle={styles.dropdownButtonLabel}
           contentStyle={styles.dropdownButtonContent}
         >
-          {/* AQUI ESTÁ A CORREÇÃO: Envolver o texto retornado por getSelectedPlayersText() em um <Text> */}
           <Text>{getSelectedPlayersText()}</Text>
         </Button>
 

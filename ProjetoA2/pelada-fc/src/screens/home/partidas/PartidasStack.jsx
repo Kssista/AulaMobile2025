@@ -1,8 +1,7 @@
-// src/screens/home/partidas/PartidasStack.jsx
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import PartidasForm from './PartidasForm'
-import PlacarScreen from './PlacarScreen' // Importe a nova tela de Placar
-import ResultadosScreen from './ResultadosScreen' // Importe a nova tela de Resultados
+import PlacarScreen from './PlacarScreen'
+import ResultadosScreen from './ResultadosScreen'
 import PartidasLista from './PartidasLista'
 
 const Stack = createNativeStackNavigator()
@@ -30,7 +29,7 @@ export default function PartidasStack() {
       />
 
       <Stack.Screen
-        name='PlacarScreen' // Nova rota para a tela de placar
+        name='PlacarScreen'
         component={PlacarScreen}
         options={{
           title: 'Controle de Placar',
@@ -39,7 +38,7 @@ export default function PartidasStack() {
       />
 
       <Stack.Screen
-        name='ResultadosScreen' // Nova rota para a tela de resultados
+        name='ResultadosScreen'
         component={ResultadosScreen}
         options={{
           title: 'Resultados das Partidas',
