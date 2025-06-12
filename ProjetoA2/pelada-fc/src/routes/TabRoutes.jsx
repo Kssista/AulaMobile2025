@@ -37,6 +37,14 @@ export default function TabRoutes() {
                     tabBarIcon: ({ color, size }) => <Ionicons name='people-outline' color={color} size={size} />
                 }}
             />
+            <Tab.Screen
+                name="Sorteios"
+                component={SorteioScreen}
+                options={{
+                    headerShown: false,
+                    tabBarIcon: ({ color, size }) => <Ionicons name='dice-outline' color={color} size={size} />
+                }}
+            />
         </Tab.Navigator>
     );
 }

@@ -40,14 +40,7 @@ export default function PartidasLista({ navigation, route }) {
         >
           Cadastrar Nova Partida
         </Button>
-        <Button
-          style={styles.button}
-          mode='outlined' 
-          icon='trophy'
-          onPress={() => navigation.navigate('ResultadosScreen')}
-        >
-          Ver Resultados
-        </Button>
+        
       </View>
 
 

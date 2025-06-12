@@ -36,6 +36,14 @@ export default function DrawerRoutes() {
                     drawerIcon: ({ color, size }) => <Ionicons name="people-outline" size={size} color={color} />
                 }}
             />
+            <Drawer.Screen
+                name="SorteioScreen"
+                component={SorteioScreen}
+                options={{
+                    title: 'Sorteio',
+                    drawerIcon: ({ color, size }) => <Ionicons name="dice-outline" size={size} color={color} />
+                }}
+            />
         </Drawer.Navigator>
     );
 }
